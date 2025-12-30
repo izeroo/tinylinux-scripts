@@ -1,0 +1,43 @@
+# .github/workflows/build-tinylinux.yml
+name: Build TinyLinux (with interactive shell)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update --recursive
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            bash \
+            coreutils
+
+      - name: Make build script executable
+        run: chmod +x ./build_tiny_linux.sh
+
+      - name: Run build
+        run: ./build_tiny_linux.sh -j $(nproc) full
+
+      # Interactive shell at the end
+      - name: Start interactive shell (tmate)
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
