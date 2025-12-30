@@ -34,7 +34,7 @@ jobs:
         run: chmod +x ./build_tiny_linux.sh
 
       - name: Run build
-        run: ./build_tiny_linux.sh -j $(nproc) full
+        run: sudo ./build_tiny_linux.sh -j $(nproc) full
 
       # Interactive shell at the end
       - name: Start interactive shell (tmate)
