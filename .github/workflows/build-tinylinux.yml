@@ -16,11 +16,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Initialize and update submodules
-        run: |
-          git submodule init
-          git submodule update --recursive
-
       - name: Install build dependencies
         run: |
           sudo apt-get update
@@ -29,9 +24,11 @@ jobs:
             git \
             bash \
             coreutils
-
-      - name: Make build script executable
-        run: chmod +x ./build_tiny_linux.sh
+            
+      - name: Initialize and update submodules
+        run: |
+          git submodule init
+          git submodule update --recursive
 
       - name: Run build
         run: sudo ./build_tiny_linux.sh -j $(nproc) full
